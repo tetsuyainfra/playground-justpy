@@ -15,10 +15,15 @@ echo "USE_PYTHON_VERSION=${USE_PYTHON_VERSION}"
 echo "USE_PYENV_NAME=${USE_PYENV_NAME}"
 
 pushd $ansible_dir
-  pyenv virtualenv $USE_PYTHON_VERSION $USE_PYENV_NAME
+  # こっちの簡易ハック使ってる人も多いらしい
+  # pyenv virtualenv $USE_PYTHON_VERSION $USE_PYENV_NAME || true
+  if [ ! -d "$(pyenv root)/versions/${USE_PYENV_NAME}" ] ; then
+    pyenv virtualenv $USE_PYTHON_VERSION $USE_PYENV_NAME
+  fi
   pyenv local $USE_PYENV_NAME
   python -m pip install --upgrade pip
   pip install remi
   pip install pysimpleguiweb
   pip install justpy
+  pip install matplotlib
 popd
